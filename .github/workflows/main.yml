@@ -35,4 +35,4 @@ jobs:
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             allow-no-subscriptions: true
             name: aci-sampleapp
-            location: 'Central India'
+            location: 'Germany West Central'
