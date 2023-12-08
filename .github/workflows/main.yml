@@ -13,8 +13,7 @@ jobs:
           uses: azure/login@v1.4.6
           with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-            allow-no-subscriptions: true
-
+            
         - name: 'Build and push image'
           uses: azure/docker-login@v1
           with:
@@ -33,6 +32,6 @@ jobs:
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            allow-no-subscriptions: true
+            
             name: aci-sampleapp
             location: 'Germany West Central'
