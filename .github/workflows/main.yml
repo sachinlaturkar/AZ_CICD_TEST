@@ -1,29 +1,33 @@
 # File: .github/workflows/workflow.yml
 
-name: Run Azure Login with OIDC
-on: [push]
+on:
+  workflow_dispatch:
+  push:
 
 permissions:
-      id-token: write
-      contents: read
-jobs: 
+  id-token: write
+  contents: read
+
+name: Run Azure Login With a Service Principal Secret
+
+jobs:
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Azure login
+      - name: 'Az CLI login with subscription OIDC'
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  
-      - name: Azure CLI script
-        uses: azure/CLI@v1
-        with:
-          azcliversion: latest
-          inlineScript: |
-            az account show
-        
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
+          enable-AzPSSession: true      
+      - run: |
+          az account show --output none
+          az account set --subscription 591010a4-08f4-4ee7-99aa-dfd9f95868d3
+          az login --tenant 872977ee-58f3-4b74-b9a3-86565ac39edf
+   
       - name: 'Build and push image'
         uses: azure/docker-login@v1
         with:
@@ -42,6 +46,5 @@ jobs:
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            
-            name: aci-sampleappV2
-            location: 'Germany West Central'
+            name: aci-sampleapp
+            location: 'Central India'
